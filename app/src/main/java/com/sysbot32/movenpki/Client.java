@@ -40,6 +40,10 @@ public class Client {
             return;
         }
 
+        int size = data.capacity();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(Integer.BYTES + size);
+        byteBuffer.putInt(size);
+        byteBuffer.put(data);
         data.flip();
         try {
             socketChannel.write(data);
