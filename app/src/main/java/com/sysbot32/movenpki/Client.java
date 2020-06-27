@@ -18,22 +18,21 @@ public class Client {
         }
     }
 
-    public boolean connect(String address) {
+    public void connect(String address) {
         if (Objects.isNull(socketChannel)) {
-            return false;
+            return;
         }
 
-        boolean ret;
-        try {
-            ret = socketChannel.connect(new InetSocketAddress(address, PORT));
-            if (ret) {
-                System.out.println("Connected to " + socketChannel.getRemoteAddress() + ".");
+        new Thread(() -> {
+            try {
+                boolean ret = socketChannel.connect(new InetSocketAddress(address, PORT));
+                if (ret) {
+                    System.out.println("Connected to " + socketChannel.getRemoteAddress() + ".");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            ret = false;
-        }
-        return ret;
+        }).start();
     }
 
     public void send(ByteBuffer data) {

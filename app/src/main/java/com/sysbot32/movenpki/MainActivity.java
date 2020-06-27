@@ -20,25 +20,29 @@ public class MainActivity extends AppCompatActivity {
         client = new Client();
 
         binding.button.setOnClickListener(v -> {
-            if (!client.getSocketChannel().isConnected()) {
-                connectToServer();
-                if (!client.getSocketChannel().isConnected()) {
-                    return;
-                }
+            connectToServer();
+            if (client.isConnected()) {
             }
         });
         binding.button2.setOnClickListener(v -> {
-            if (!client.getSocketChannel().isConnected()) {
-                connectToServer();
-                if (!client.getSocketChannel().isConnected()) {
-                    return;
-                }
+            connectToServer();
+            if (client.isConnected()) {
             }
         });
     }
 
     public void connectToServer() {
+        if (client.isConnected()) {
+            return;
+        }
+
         String address = binding.editText.getText().toString();
-        Toast.makeText(this, client.connect(address) ? "PC에 연결되었습니다." : "PC의 IP 주소를 입력해주세요.", Toast.LENGTH_SHORT).show();
+        client.connect(address);
+        try {
+            Thread.sleep(100);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this, client.isConnected() ? "PC에 연결되었습니다." : "PC의 IP 주소를 입력해주세요.", Toast.LENGTH_SHORT).show();
     }
 }
