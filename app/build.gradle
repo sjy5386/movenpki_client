@@ -21,9 +21,10 @@ android {
         }
     }
 
-    viewBinding {
-        enabled true
+    buildFeatures {
+        viewBinding true
     }
+
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
