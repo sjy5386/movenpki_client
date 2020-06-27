@@ -1,9 +1,5 @@
 package com.sysbot32.movenpki;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,7 +14,6 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class Archiver {
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void zip(String input, String output) {
         String[] files = searchDirectory(input);
         try {
@@ -43,7 +38,6 @@ public class Archiver {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void unzip(String input, String output) {
         try {
             ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(input));
@@ -86,7 +80,6 @@ public class Archiver {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void makeDirectory(String filename) throws Exception {
         String path = filename.substring(0, filename.lastIndexOf("\\"));
         Path p = Paths.get(path);
@@ -96,7 +89,6 @@ public class Archiver {
         Files.createDirectories(p);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void makeDirectory(String path, String zipName) throws Exception {
         int index = zipName.lastIndexOf("\\");
         if (index != -1) {

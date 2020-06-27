@@ -1,9 +1,5 @@
 package com.sysbot32.movenpki;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -22,7 +18,6 @@ public class Client {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public boolean connect(String address) {
         if (Objects.isNull(socketChannel)) {
             return false;
