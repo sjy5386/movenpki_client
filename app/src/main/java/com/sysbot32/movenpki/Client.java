@@ -9,6 +9,7 @@ public class Client {
     public static final int PORT = 13681;
 
     private SocketChannel socketChannel;
+    private static Client client;
 
     public Client() {
         try {
@@ -16,6 +17,7 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        client = this;
     }
 
     public void connect(String address) {
@@ -84,5 +86,9 @@ public class Client {
 
     public SocketChannel getSocketChannel() {
         return socketChannel;
+    }
+
+    public static Client getClient() {
+        return client;
     }
 }

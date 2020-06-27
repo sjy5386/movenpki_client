@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.sysbot32.movenpki.databinding.ActivityMainBinding;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private Client client;
@@ -21,7 +23,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("com.sysbot32.movenpki", MODE_PRIVATE);
         binding.editText.setText(sharedPreferences.getString("address", ""));
 
-        client = new Client();
+        if (Objects.isNull(Client.getClient())) {
+            client = new Client();
+        }
 
         binding.button.setOnClickListener(v -> {
             connectToServer();
