@@ -37,7 +37,7 @@ public class Client {
     }
 
     public void send(ByteBuffer data) {
-        if (!socketChannel.isConnected()) {
+        if (!isConnected()) {
             return;
         }
 
@@ -50,6 +50,10 @@ public class Client {
     }
 
     public ByteBuffer receive() {
+        if (!isConnected()) {
+            return null;
+        }
+
         ByteBuffer size = ByteBuffer.allocate(Integer.BYTES);
         ByteBuffer data;
         try {
@@ -69,6 +73,10 @@ public class Client {
         }
         data.flip();
         return data;
+    }
+
+    public boolean isConnected() {
+        return Objects.nonNull(socketChannel) && socketChannel.isConnected();
     }
 
     public SocketChannel getSocketChannel() {
