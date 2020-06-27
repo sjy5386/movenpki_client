@@ -1,5 +1,6 @@
 package com.sysbot32.movenpki;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -20,41 +21,15 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        SharedPreferences sharedPreferences = getSharedPreferences("com.sysbot32.movenpki", MODE_PRIVATE);
-        binding.editText.setText(sharedPreferences.getString("address", ""));
-
-        if (Objects.isNull(Client.getClient())) {
-            client = new Client();
-        }
+        client = Objects.isNull(Client.getClient()) ? new Client() : Client.getClient();
 
         binding.button.setOnClickListener(v -> {
-            connectToServer();
-            if (client.isConnected()) {
-            }
         });
         binding.button2.setOnClickListener(v -> {
-            connectToServer();
-            if (client.isConnected()) {
-            }
         });
-    }
 
-    public void connectToServer() {
-        if (client.isConnected()) {
-            return;
+        if (!client.isConnected()) {
+            startActivity(new Intent(this, ConnectionActivity.class));
         }
-
-        String address = binding.editText.getText().toString();
-        client.connect(address);
-        try {
-            Thread.sleep(100);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Toast.makeText(this, client.isConnected() ? "PC에 연결되었습니다." : "PC의 IP 주소를 입력해주세요.", Toast.LENGTH_SHORT).show();
-
-        SharedPreferences.Editor editor = getSharedPreferences("com.sysbot32.movenpki", MODE_PRIVATE).edit();
-        editor.putString("address", address);
-        editor.apply();
     }
 }
