@@ -12,6 +12,8 @@ public class Client {
 
     private SocketChannel socketChannel;
     private ExecutorService executorService;
+    private ByteBuffer receivedData = null;
+
     private static Client client;
 
     public Client() {
@@ -111,6 +113,7 @@ public class Client {
             if (Objects.isNull(data)) {
                 break;
             }
+            receivedData = data;
         }
         disconnect();
     }
@@ -121,6 +124,10 @@ public class Client {
 
     public SocketChannel getSocketChannel() {
         return socketChannel;
+    }
+
+    public ByteBuffer getReceivedData() {
+        return receivedData;
     }
 
     public static Client getClient() {
