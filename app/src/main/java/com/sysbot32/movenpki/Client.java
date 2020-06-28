@@ -4,11 +4,14 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Client {
     public static final int PORT = 13681;
 
     private SocketChannel socketChannel;
+    private ExecutorService executorService;
     private static Client client;
 
     public Client() {
@@ -17,7 +20,17 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        executorService = Executors.newSingleThreadExecutor();
+
         client = this;
+    }
+
+    public void start() {
+        executorService.submit(this::receiving);
+    }
+
+    public void stop() {
+        executorService.shutdownNow();
     }
 
     public void connect(String address) {
@@ -37,21 +50,33 @@ public class Client {
         }).start();
     }
 
+    public void disconnect() {
+        stop();
+        try {
+            socketChannel.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Disconnected.");
+    }
+
     public void send(ByteBuffer data) {
         if (!isConnected()) {
             return;
         }
 
-        int size = data.capacity();
-        ByteBuffer byteBuffer = ByteBuffer.allocate(Integer.BYTES + size);
-        byteBuffer.putInt(size);
-        byteBuffer.put(data);
-        data.flip();
-        try {
-            socketChannel.write(data);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        new Thread(() -> {
+            int size = data.capacity();
+            ByteBuffer byteBuffer = ByteBuffer.allocate(Integer.BYTES + size);
+            byteBuffer.putInt(size);
+            byteBuffer.put(data);
+            byteBuffer.flip();
+            try {
+                socketChannel.write(byteBuffer);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public ByteBuffer receive() {
@@ -78,6 +103,16 @@ public class Client {
         }
         data.flip();
         return data;
+    }
+
+    private void receiving() {
+        while (true) {
+            ByteBuffer data = receive();
+            if (Objects.isNull(data)) {
+                break;
+            }
+        }
+        disconnect();
     }
 
     public boolean isConnected() {
