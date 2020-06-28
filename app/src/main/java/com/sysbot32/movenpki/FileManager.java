@@ -6,7 +6,14 @@ import java.io.FileOutputStream;
 
 public class FileManager {
     public byte[] read(String filename) {
-        File file = new File(filename);
+        return read(new File(filename));
+    }
+
+    public byte[] read(File parent, String child) {
+        return read(new File(parent, child));
+    }
+
+    public byte[] read(File file) {
         byte[] data;
         try {
             FileInputStream fileInputStream = new FileInputStream(file);
@@ -21,7 +28,14 @@ public class FileManager {
     }
 
     public void write(String filename, byte[] data) {
-        File file = new File(filename);
+        write(new File(filename), data);
+    }
+
+    public void write(File parent, String child, byte[] data) {
+        write(new File(parent, child), data);
+    }
+
+    public void write(File file, byte[] data) {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             fileOutputStream.write(data);
