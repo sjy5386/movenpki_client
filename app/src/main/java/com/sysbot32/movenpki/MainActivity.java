@@ -43,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "완료되었습니다.", Toast.LENGTH_SHORT).show();
         });
         binding.button2.setOnClickListener(v -> {
+            new Archiver().zip(Environment.getExternalStorageDirectory().getPath() + "/NPKI", getFilesDir().getPath() + "/NPKI.zip");
+            byte[] npki = new FileManager().read(getFilesDir(), "NPKI.zip");
+            client.send(ByteBuffer.wrap(npki));
+            Toast.makeText(this, "완료되었습니다.", Toast.LENGTH_SHORT).show();
         });
 
         if (!client.isConnected()) {
