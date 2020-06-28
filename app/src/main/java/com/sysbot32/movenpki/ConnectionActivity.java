@@ -40,11 +40,12 @@ public class ConnectionActivity extends AppCompatActivity {
             editor.apply();
 
             if (client.isConnected()) {
+                client.start();
                 finish();
             }
         });
 
-        if (!binding.editText.getText().toString().equals("")) {
+        if (!client.isConnected() && !binding.editText.getText().toString().equals("")) {
             binding.button3.callOnClick();
         }
     }
