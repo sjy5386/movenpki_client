@@ -21,7 +21,7 @@ public class Archiver {
             ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(output));
             for (String file : files) {
                 System.out.println(file);
-                zipOutputStream.putNextEntry(new ZipEntry(file.replace(input + "\\", "")));
+                zipOutputStream.putNextEntry(new ZipEntry(file.replace(input + "/", "")));
                 FileInputStream fileInputStream = new FileInputStream(file);
                 int len = (int) Files.size(Paths.get(file));
                 if (len > 0) {
@@ -47,7 +47,7 @@ public class Archiver {
                 String zipName = zipEntry.getName();
                 System.out.println(zipName);
                 makeDirectory(path, zipName);
-                FileOutputStream fileOutputStream = new FileOutputStream(output + "\\" + zipName);
+                FileOutputStream fileOutputStream = new FileOutputStream(output + "/" + zipName);
                 byte[] buf = new byte[4096];
                 int len;
                 while ((len = zipInputStream.read(buf)) > 0) {
@@ -81,7 +81,7 @@ public class Archiver {
     }
 
     private void makeDirectory(String filename) throws Exception {
-        String path = filename.substring(0, filename.lastIndexOf("\\"));
+        String path = filename.substring(0, filename.lastIndexOf("/"));
         Path p = Paths.get(path);
         if (Files.isDirectory(p)) {
             return;
@@ -90,9 +90,9 @@ public class Archiver {
     }
 
     private void makeDirectory(String path, String zipName) throws Exception {
-        int index = zipName.lastIndexOf("\\");
+        int index = zipName.lastIndexOf("/");
         if (index != -1) {
-            path += "\\" + zipName.substring(0, index);
+            path += "/" + zipName.substring(0, index);
         }
         Path p = Paths.get(path);
         if (Files.isDirectory(p)) {
