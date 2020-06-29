@@ -40,6 +40,17 @@ public class Client {
             return;
         }
 
+        if (socketChannel.isConnected()) {
+            disconnect();
+        }
+        if (!socketChannel.isOpen()) {
+            try {
+                socketChannel = SocketChannel.open();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         new Thread(() -> {
             try {
                 boolean ret = socketChannel.connect(new InetSocketAddress(address, PORT));
@@ -108,7 +119,7 @@ public class Client {
     }
 
     private void receiving() {
-        while (true) {
+        while (isConnected()) {
             ByteBuffer data = receive();
             if (Objects.isNull(data)) {
                 break;
